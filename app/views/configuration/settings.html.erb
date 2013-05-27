@@ -147,7 +147,7 @@
       <br/>
       <% if Configuration.available_modules.include?('HR') %>
         <% if @config[:employee_number_auto_increment] == '1' %>
-          <%= check_box :configuration, :employee_number_auto_increment, :checked => true %> <%= t('employee_admission_auto') %>
+          <%= check_box :configuration, :employee_number_auto_increment, :checked => true %><%= t('employee_admission_auto') %>
         <% else %>
           <%= check_box :configuration, :employee_number_auto_increment, :checked => false %><%= t('employee_admission_auto') %>
         <% end %>
@@ -162,11 +162,18 @@
         <br/>
         <%= render :partial=>mod.camelize.constantize.send("general_settings_checkbox") %>
       <% end %>
+      <br/>
+
+      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('HR') }, "HR", nil %>Enable HR Module
+      <br/>
+      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Finance') }, "Finance", nil %>Enable Finance Module
+
+      <br/>
+
       <div id="submit-button">
         <%= submit_tag "► #{t('update')}" %>
       </div>
 
     <% end %>
-
   </div>
 </div>

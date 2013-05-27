@@ -26,20 +26,28 @@ class ConfigurationController < ApplicationController
   def settings
     @config = Configuration.get_multiple_configs_as_hash ['InstitutionName', 'InstitutionAddress', 'InstitutionPhoneNo', \
         'StudentAttendanceType', 'CurrencyType', 'ExamResultType', 'AdmissionNumberAutoIncrement','EmployeeNumberAutoIncrement', \
-        'NetworkState','Locale','FinancialYearStartDate','FinancialYearEndDate','EnableNewsCommentModeration','DefaultCountry','TimeZone']
+        'NetworkState','Locale','FinancialYearStartDate','FinancialYearEndDate','EnableNewsCommentModeration',
+        'DefaultCountry', 'TimeZone', 'AvailableModules']
     @grading_types = Course::GRADINGTYPES
     @enabled_grading_types = Configuration.get_grading_types
     @time_zones = TimeZone.all
     @school_detail = SchoolDetail.first || SchoolDetail.new
     @countries=Country.all
     if request.post?
-      Configuration.set_config_values(params[:configuration])
+      # hack for configuration parameter to include modules
+      modules = params[:configuration]["AvailableModules"].delete_if(&:blank?)
+      params[:configuration].delete_if { |k, v| k == "AvailableModules" }
+      # hack for configuration parameter to include modules
+
+      Configuration.set_config_values(params[:configuration], modules)
       session[:language] = nil unless session[:language].nil?
       @school_detail.logo = params[:school_detail][:school_logo] if params[:school_detail].present?
       unless @school_detail.save
-        @config = Configuration.get_multiple_configs_as_hash ['InstitutionName', 'InstitutionAddress', 'InstitutionPhoneNo', \
-            'StudentAttendanceType', 'CurrencyType', 'ExamResultType', 'AdmissionNumberAutoIncrement','EmployeeNumberAutoIncrement', \
-            'NetworkState','Locale','FinancialYearStartDate','FinancialYearEndDate','EnableNewsCommentModeration','DefaultCountry','TimeZone']
+        @config = Configuration.get_multiple_configs_as_hash ['InstitutionName', 'InstitutionAddress', 
+          'InstitutionPhoneNo', 'StudentAttendanceType', 'CurrencyType', 'ExamResultType', 
+          'AdmissionNumberAutoIncrement','EmployeeNumberAutoIncrement', 'NetworkState', 'Locale', 
+          'FinancialYearStartDate','FinancialYearEndDate','EnableNewsCommentModeration', 
+          'DefaultCountry', 'TimeZone', 'AvailableModules']
         return
       end
       @current_user.clear_menu_cache

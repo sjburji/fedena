@@ -1,2 +1,4 @@
 /log/*
 /tmp/*
+.ruby-gemset
+.ruby-version

@@ -59,8 +59,19 @@ class Configuration < ActiveRecord::Base
       modules.map(&:config_value)
     end
 
-    def set_config_values(values_hash)
+    def set_config_values(values_hash, modules = nil)
+      set_module_value("AvailableModules", modules) if modules
       values_hash.each_pair { |key, value| set_value(key.to_s.camelize, value) }
+    end
+
+    def set_module_value(key, modules)
+      # delete all & recreate on selection
+      Configuration.destroy_all(:config_key => "AvailableModules")
+
+      modules.each do |m|
+        config = find_by_config_key_and_config_value(key.to_s.camelize, m)
+        Configuration.create(:config_key => key, :config_value => m) unless config
+      end
     end
 
     def set_value(key, value)
