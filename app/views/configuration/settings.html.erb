@@ -167,7 +167,12 @@
       <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('HR') }, "HR", nil %>Enable HR Module
       <br/>
       <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Finance') }, "Finance", nil %>Enable Finance Module
-
+      <br/>
+      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Attendance') }, "Attendance", nil %>Enable Attendance Module
+      <br/>
+      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Examination') }, "Examination", nil %>Enable Examination Module
+      <br/>
+      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Timetable') }, "Timetable", nil %>Enable Timetable Module
       <br/>
 
       <div id="submit-button">
