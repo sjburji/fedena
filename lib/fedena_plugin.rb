@@ -19,6 +19,7 @@
 class FedenaPlugin
 
   AVAILABLE_MODULES = []
+  PLUGGABLE_MODULES = ["HR", "Finance", "Attendance", "Timetable", "Examination"]
   ADDITIONAL_LINKS = Hash.new{|k,v| k[v] = []}
   REGISTERED_HOOKS = Hash.new{|k,v| k[v] = []}
   FINANCE_CATEGORY = []

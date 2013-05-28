@@ -145,14 +145,16 @@
         <%= check_box :configuration, :admission_number_auto_increment, :checked => false %><%= t('student_admission_auto') %>
       <% end %>
       <br/>
+
       <% if Configuration.available_modules.include?('HR') %>
         <% if @config[:employee_number_auto_increment] == '1' %>
           <%= check_box :configuration, :employee_number_auto_increment, :checked => true %><%= t('employee_admission_auto') %>
         <% else %>
           <%= check_box :configuration, :employee_number_auto_increment, :checked => false %><%= t('employee_admission_auto') %>
         <% end %>
+        <br/>
       <% end %>
-      <br/>
+
       <% if @config[:enable_news_comment_moderation] == '1' %>
         <%= check_box :configuration, :enable_news_comment_moderation, :checked => true %><%= t('enable_news_comment_moderation') %>
       <% else %>
@@ -164,17 +166,11 @@
       <% end %>
       <br/>
 
-      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('HR') }, "HR", nil %>Enable HR Module
-      <br/>
-      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Finance') }, "Finance", nil %>Enable Finance Module
-      <br/>
-      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Attendance') }, "Attendance", nil %>Enable Attendance Module
-      <br/>
-      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Examination') }, "Examination", nil %>Enable Examination Module
-      <br/>
-      <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?('Timetable') }, "Timetable", nil %>Enable Timetable Module
-      <br/>
-
+      <% FedenaPlugin::PLUGGABLE_MODULES.each do |m| %>
+        <%= check_box :configuration, "AvailableModules", { :multiple => true, :checked => Configuration.available_modules.include?(m) }, m, nil %><%= "Enable #{m} Module" %>
+        <br/>
+      <% end -%>
+      
       <div id="submit-button">
         <%= submit_tag "► #{t('update')}" %>
       </div>
